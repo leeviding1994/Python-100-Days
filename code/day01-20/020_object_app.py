@@ -47,6 +47,7 @@ class Poker:
         return self.current < len(self.cards)
     
 poker = Poker()
+print(list(card.view() for card in poker.cards))
 print("\n".join(list(card.view() for card in poker.cards)))  # 洗牌前的牌
 poker.shuffle()
 print("\n".join(list(card.view() for card in poker.cards)))  # 洗牌后的牌
