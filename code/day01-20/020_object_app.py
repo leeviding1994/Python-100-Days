@@ -16,6 +16,19 @@ class Card:
     def view(self):
         faces = ['A','2','3','4','5','6','7','8','9','10','J','Q','K']
         return self.suite, faces[self.face-1]
+    
+    # __repr__方法是用来定义对象的字符串表示的
+    # __str__方法是用来定义对象的字符串表示的，如果没有定义__str__方法，那么就会使用__repr__方法来定义对象的字符串表示。
+    def __repr__(self):
+        suites = '♠♥♣♦'
+        faces = ['', 'A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
+        return f'{suites[self.suite.value]}{faces[self.face]}'  # 返回牌的花色和点数
+    
+    # __lt__方法是用来定义对象的比较大小的
+    def __lt__(self, other):
+        if self.suite == other.suite:
+            return self.face < other.face   # 花色相同比较点数的大小
+        return self.suite.value < other.suite.value   # 花色不同比较花色对应的值
 
 card = Card(Suite.HEART, 1)
 card.view()
@@ -48,9 +61,8 @@ class Poker:
     
 poker = Poker()
 print(list(card.view() for card in poker.cards))
-print("\n".join(list(card.view() for card in poker.cards)))  # 洗牌前的牌
 poker.shuffle()
-print("\n".join(list(card.view() for card in poker.cards)))  # 洗牌后的牌
+print(list(card.view() for card in poker.cards))
 
 class Player:
     """玩家"""
@@ -66,3 +78,16 @@ class Player:
     def arrange(self):
         """整理手上的牌"""
         self.cards.sort()
+
+poker = Poker()
+poker.shuffle()
+players = [Player('东邪'), Player('西毒'), Player('南帝'), Player('北丐')]
+# 将牌轮流发到每个玩家手上每人13张牌
+for _ in range(13):
+    for player in players:
+        player.get_one(poker.deal())
+# 玩家整理手上的牌输出名字和手牌
+for player in players:
+    player.arrange()
+    print(f'{player.name}: ', end='')
+    print(player.cards)
